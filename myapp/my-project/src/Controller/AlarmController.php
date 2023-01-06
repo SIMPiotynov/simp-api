@@ -4,14 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Alarm;
 use App\Repository\AlarmRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class AlarmController extends AbstractController
 {
-    #[Route('/alarms', name: 'getAlarms', methods: ['GET'])]
+    #[Route('/alarm', name: 'getAlarms', methods: ['GET'])]
     public function getAlarms(AlarmRepository $alarmRepository, SerializerInterface $serializer): Response
     {
         $alarms = $alarmRepository->findAll();
@@ -22,7 +24,7 @@ class AlarmController extends AbstractController
         ]);
     }
 
-    #[Route('/alarms/{id}', name: 'getAlarmById', methods: ['GET'])]
+    #[Route('/alarm/{id}', name: 'getAlarmById', methods: ['GET'])]
     public function getAlarmById(Alarm $alarm, SerializerInterface $serializer)
     {
         $alarm = $serializer->serialize($alarm, 'json', ['groups'=> "alarm"]);
@@ -32,20 +34,23 @@ class AlarmController extends AbstractController
         ]);
     }
 
-    #[Route('/alarms/', name: 'createAlarm', methods: ['POST'])]
-    public function createAlarm($request)
+    #[Route('/alarm', name: 'createAlarm', methods: ['POST'])]
+    public function createAlarm(Request $request)
     {
         // creer un objet à partir des elements
         $request->request->get('music');
     }
 
-    #[Route('alarms/{alarm_id}', name: 'deleteAlarm', methods: ['DELETE'])]
-    public function deleteAlarm($alarm_id)
+    #[Route('/alarm/{id}', name: 'deleteAlarm', methods: ['DELETE'])]
+    public function deleteAlarm(Alarm $alarm, EntityManagerInterface $em)
     {
         // supprimer l'alarme
+        $em->remove($alarm);
+        $em->flush();
+
         return $this->json([
             'code' => 200,
-            'message' => 'Not deleted yet, no function'
+            'message' => ''
         ]);
     }
 }
