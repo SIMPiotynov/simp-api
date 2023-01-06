@@ -35,10 +35,20 @@ class AlarmController extends AbstractController
     }
 
     #[Route('/alarm', name: 'createAlarm', methods: ['POST'])]
-    public function createAlarm(Request $request)
+    public function createAlarm(Request $request, EntityManagerInterface $em)
     {
         // creer un objet à partir des elements
-        $request->request->get('music');
+        $content = json_decode($request->getContent());
+        $alarm = new Alarm();
+        $alarm->setAlarm($content->music); 
+
+        $em->persist($alarm);
+        $em->flush();
+
+        return $this->json([
+            'code' => 200,
+            'message' => json_encode($alarm)
+        ]);
     }
 
     #[Route('/alarm/{id}', name: 'deleteAlarm', methods: ['DELETE'])]
@@ -50,7 +60,7 @@ class AlarmController extends AbstractController
 
         return $this->json([
             'code' => 200,
-            'message' => ''
+            'message' => 'delete'
         ]);
     }
 }
