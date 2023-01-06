@@ -6,8 +6,12 @@ services:
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
-      - MARIADB_USER=bn_myapp
       - MARIADB_DATABASE=bitnami_myapp
+      - MARIADB_PASSWORD=monkey
+      - MARIADB_PORT_NUMBER=3306
+      - MARIADB_USER=simp
+    ports:
+      - '5069:3306'
   myapp:
     image: docker.io/bitnami/symfony:6.2
     ports:
@@ -17,7 +21,8 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
       - SYMFONY_DATABASE_HOST=mariadb
       - SYMFONY_DATABASE_PORT_NUMBER=3306
-      - SYMFONY_DATABASE_USER=bn_myapp
+      - SYMFONY_DATABASE_USER=simp
+      - SYMFONY_DATABASE_PASSWORD=monkey
       - SYMFONY_DATABASE_NAME=bitnami_myapp
     volumes:
       - './my-project:/app'
