@@ -24,7 +24,7 @@ class HistoryController extends AbstractController
     }
 
     #[Route('/history/{id}', name: 'getHistoryById')]
-    public function getHistoryById(History $history, HistoryRepository $historyRepository, SerializerInterface $serializer): Response
+    public function getHistoryById(History $history, SerializerInterface $serializer): Response
     {
         $history = $serializer->serialize($history, 'json', ['groups'=> ["history", "user"]]);
 
