@@ -28,6 +28,7 @@ class AlarmController extends AbstractController
     public function getAlarmById(Alarm $alarm, SerializerInterface $serializer)
     {
         $alarm = $serializer->serialize($alarm, 'json', ['groups'=> "alarm"]);
+        
         return $this->json([
             'code' => 200,
             'message' => json_decode($alarm)
@@ -60,7 +61,25 @@ class AlarmController extends AbstractController
 
         return $this->json([
             'code' => 200,
-            'message' => 'delete'
+            'message' => 'deleted'
+        ]);
+    }
+
+    #[Route('/alarms/{id}', name: 'updateAlarm', methods: ['PUT'])]
+    public function updateAlarm(Request $request, Alarm $alarm, EntityManagerInterface $em)
+    {
+        // creer un objet à partir des elements
+        $content = json_decode($request->getContent());
+        if(!empty($content->music))
+            $alarm->setAlarm($content->music);
+        if(!empty($content->name))
+            $alarm->setName($content->name);
+        $em->persist($alarm);
+        $em->flush();
+
+        return $this->json([
+            'code' => 200,
+            'message' => json_encode($alarm)
         ]);
     }
 }
