@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class AlarmController extends AbstractController
 {
-    #[Route('/alarm', name: 'getAlarms', methods: ['GET'])]
+    #[Route('/alarms', name: 'getAlarms', methods: ['GET'])]
     public function getAlarms(AlarmRepository $alarmRepository, SerializerInterface $serializer): Response
     {
         $alarms = $alarmRepository->findAll();
@@ -24,7 +24,7 @@ class AlarmController extends AbstractController
         ]);
     }
 
-    #[Route('/alarm/{id}', name: 'getAlarmById', methods: ['GET'])]
+    #[Route('/alarms/{id}', name: 'getAlarmById', methods: ['GET'])]
     public function getAlarmById(Alarm $alarm, SerializerInterface $serializer)
     {
         $alarm = $serializer->serialize($alarm, 'json', ['groups'=> "alarm"]);
@@ -34,7 +34,7 @@ class AlarmController extends AbstractController
         ]);
     }
 
-    #[Route('/alarm', name: 'createAlarm', methods: ['POST'])]
+    #[Route('/alarms', name: 'createAlarm', methods: ['POST'])]
     public function createAlarm(Request $request, EntityManagerInterface $em)
     {
         // creer un objet à partir des elements
@@ -51,7 +51,7 @@ class AlarmController extends AbstractController
         ]);
     }
 
-    #[Route('/alarm/{id}', name: 'deleteAlarm', methods: ['DELETE'])]
+    #[Route('/alarms/{id}', name: 'deleteAlarm', methods: ['DELETE'])]
     public function deleteAlarm(Alarm $alarm, EntityManagerInterface $em)
     {
         // supprimer l'alarme
