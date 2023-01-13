@@ -16,49 +16,48 @@ class User
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?string $lastname = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?string $fingerprint = null;
 
     #[ORM\Column]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity:History::class)]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?Collection $histories = null;
 
     #[ORM\Column]
-    #[Groups(["user"])]
+    #[Groups(["user", "user_details"])]
     private ?bool $isAuthorized = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(["user"])]
+    #[Groups(["alarm"])]
     private ?Alarm $alarm = null;
-
 
     public function __construct()
     {

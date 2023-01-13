@@ -26,8 +26,8 @@ class Alarm
     #[Groups(["alarm"])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'alarm', targetEntity: User::class)]
-    #[Groups(["alarm", "user"])]
+    #[ORM\OneToMany(mappedBy: 'alarm', targetEntity: User::class, orphanRemoval: true)]
+    #[Groups(["user_details"])]
     private Collection $users;
 
     #[ORM\Column]
