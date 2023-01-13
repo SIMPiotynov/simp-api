@@ -35,7 +35,7 @@ class User
     #[Groups(["user"])]
     private ?string $lastname = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(["user"])]
     private ?string $fingerprint = null;
 
