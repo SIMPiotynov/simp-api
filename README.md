@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # SIMP API
 
 *Initialize the server in 9 steps*
@@ -65,3 +66,19 @@ ___
 10/ Run the server.
 
 ✅ You should now have the server running.
+=======
+# simp-api
+
+## Install project dependencies
+```composer install```
+
+## Env config
+Don't forget to overwrite your .env file
+
+## Run docker stack
+```docker-compose up```
+
+## Update database schema 
+if database is not created : ```php bin/console doctrine:schema:create```
+```php bin/console doctrine:schema:update -f```
+>>>>>>> Stashed changes
