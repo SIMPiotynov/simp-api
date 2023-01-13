@@ -63,6 +63,8 @@ class UserController extends AbstractController
             $user->setFirstname($content->firstname);
         if(!empty($content->fingerprint))
             $user->setFingerprint($content->fingerprint);
+        if(!empty($content->isAuthorized))
+            $user->setIsAuthorized($content->isAuthorized);
         $user->setUpdatedAt(new DateTimeImmutable());
 
         $em->persist($user);
@@ -84,6 +86,7 @@ class UserController extends AbstractController
         $user->setLastname($content->lastname); 
         $user->setFirstname($content->firstname); 
         $user->setFingerprint($content->fingerprint); 
+        $user->setIsAuthorized($content->isAuthorized); 
         $user->setCreatedAt(new DateTimeImmutable());
 
         $em->persist($user);

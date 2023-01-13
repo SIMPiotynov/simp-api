@@ -48,6 +48,10 @@ class User
     #[ORM\OneToMany(mappedBy: 'user', targetEntity:History::class)]
     private ?Collection $histories = null;
 
+    #[ORM\Column]
+    #[Groups(["user"])]
+    private ?bool $isAuthorized = null;
+
 
     public function __construct()
     {
@@ -163,6 +167,18 @@ class User
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function isIsAuthorized(): ?bool
+    {
+        return $this->isAuthorized;
+    }
+
+    public function setIsAuthorized(bool $isAuthorized): self
+    {
+        $this->isAuthorized = $isAuthorized;
 
         return $this;
     }
