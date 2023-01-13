@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AlarmRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,7 +23,21 @@ class Alarm
     private ?string $alarm = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["alarm"])]
     private ?string $name = null;
+
+    #[ORM\OneToMany(mappedBy: 'alarm', targetEntity: User::class)]
+    #[Groups(["alarm", "user"])]
+    private Collection $users;
+
+    #[ORM\Column]
+    #[Groups(["alarm"])]
+    private ?bool $isDefault = false;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -48,6 +64,48 @@ class Alarm
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setAlarm($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getAlarm() === $this) {
+                $user->setAlarm(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isIsDefault(): ?bool
+    {
+        return $this->isDefault;
+    }
+
+    public function setIsDefault(bool $isDefault): self
+    {
+        $this->isDefault = $isDefault;
 
         return $this;
     }

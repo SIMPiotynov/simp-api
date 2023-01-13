@@ -40,17 +40,24 @@ class User
     private ?string $fingerprint = null;
 
     #[ORM\Column]
+    #[Groups(["user"])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["user"])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity:History::class)]
+    #[Groups(["user"])]
     private ?Collection $histories = null;
 
     #[ORM\Column]
     #[Groups(["user"])]
     private ?bool $isAuthorized = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(["user"])]
+    private ?Alarm $alarm = null;
 
 
     public function __construct()
@@ -179,6 +186,18 @@ class User
     public function setIsAuthorized(bool $isAuthorized): self
     {
         $this->isAuthorized = $isAuthorized;
+
+        return $this;
+    }
+
+    public function getAlarm(): ?Alarm
+    {
+        return $this->alarm;
+    }
+
+    public function setAlarm(?Alarm $alarm): self
+    {
+        $this->alarm = $alarm;
 
         return $this;
     }

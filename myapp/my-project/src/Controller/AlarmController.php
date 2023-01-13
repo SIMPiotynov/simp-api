@@ -74,6 +74,9 @@ class AlarmController extends AbstractController
             $alarm->setAlarm($content->music);
         if(!empty($content->name))
             $alarm->setName($content->name);
+        if(!empty($content->isDefault))
+            $alarm->setIsDefault($content->isDefault);
+            
         $em->persist($alarm);
         $em->flush();
 
