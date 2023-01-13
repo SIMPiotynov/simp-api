@@ -57,7 +57,8 @@ class AlarmController extends AbstractController
 
         return $this->json([
             'code' => 200,
-            'message' => json_decode($alarm)
+            'message' => json_decode($alarm),
+            "music" => $content->music
         ]);
     }
 
