@@ -4,10 +4,10 @@
 
 ## Table of Contents
 
-- [Installer docker compose](##-installer-docker-compose)
-- [Composer install](##-composer-install)
-- [Initialiser la BDD](##-initialiser-la-bdd)
-- [Run le serveur](##-run-le-serveur)
+- [Docker Compose Installation](##-docker-compose-installation)
+- [Composer installation](##-composer-installation)
+- [Initialize the Database](##-initialize-the-database)
+- [Run the serveur](##-run-the-serveur)
 
 ## Docker Compose Installation
 ___
@@ -52,7 +52,7 @@ ___
 
 ✅ You should now have the database initialized.
 
-## Run le serveur
+## Run the serveur
 ___
 
 8/ In the .env file of the /my-project directory, locate the following two lines:
