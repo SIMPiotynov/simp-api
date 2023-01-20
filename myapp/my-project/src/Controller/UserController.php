@@ -99,7 +99,6 @@ class UserController extends AbstractController
         $user = new User();
         $user->setLastname($content->lastname); 
         $user->setFirstname($content->firstname); 
-        $user->setFingerprint($content->fingerprint); 
         $user->setIsAuthorized($content->isAuthorized); 
         $user->setCreatedAt(new DateTimeImmutable());
 
