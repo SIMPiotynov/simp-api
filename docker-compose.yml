@@ -23,6 +23,6 @@ services:
       - SYMFONY_DATABASE_PASSWORD=monkey
       - SYMFONY_DATABASE_NAME=bitnami_myapp
     volumes:
-      - './:/app'
+      - './api:/app'
     depends_on:
       - mariadb
