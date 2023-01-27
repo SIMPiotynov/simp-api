@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Serializer;
+use function PHPUnit\Framework\isEmpty;
 
 class AlarmController extends AbstractController
 {
@@ -40,26 +41,49 @@ class AlarmController extends AbstractController
     }
 
     #[Route('/alarms', name: 'createAlarm', methods: ['POST'])]
-    public function createAlarm(Request $request, EntityManagerInterface $em, Serializer $serializer)
+    public function createAlarm(Request $request, EntityManagerInterface $em, Serializer $serializer, AlarmRepository $alarmRepository)
     {
         $serializer = $serializer->getSerializer();
 
         // creer un objet à partir des elements
         $content = json_decode($request->getContent());
-        $alarm = new Alarm();
-        $alarm->setAlarm($content->music); 
-        $alarm->setName($content->name); 
-
-        $em->persist($alarm);
-        $em->flush();
-
-        $alarm = $serializer->serialize($alarm, 'json', ['groups'=> ["alarm", "user_details"]]);
+        // $checkAlarm = $alarmRepository->findOneBy(['name' => $content->name]);
+        dd($request->files->get('files'));
 
         return $this->json([
             'code' => 200,
-            'message' => json_decode($alarm),
-            "music" => $content->music
+            'message' => null,
         ]);
+        if (!$checkAlarm) {
+            $alarm = new Alarm();
+
+            $music64 = $content->content;// explode(",", $content->content)[1];
+
+            $alarm->setAlarm($music64); 
+            $alarm->setName(isEmpty($content->name) ? $content->name :  "noName" );
+            
+            // file_put_contents($this->getParameter('uploads_directory').'/'.$content->name, base64_decode(str_replace("data:audio/midi;base64,", '', $content->content)));
+            $ifp = fopen($this->getParameter('uploads_directory').'/'.$content->name, "w"); 
+            fwrite( $ifp, base64_decode(str_replace("data:audio/midi;base64,", '', $content->content))); 
+            fclose( $ifp ); 
+
+            $em->persist($alarm);
+            $em->flush();
+
+            $alarm = $serializer->serialize($alarm, 'json', ['groups'=> ["alarm", "user_details"]]);
+    
+            return $this->json([
+                'code' => 200,
+                'message' => json_decode($alarm),
+                "explode" => $music64
+            ]);
+        } else {
+            return $this->json([
+                'code' => 200,
+                'message' => null,
+            ]);
+        }
+
     }
 
     #[Route('/alarms/{id}', name: 'deleteAlarm', methods: ['DELETE'])]

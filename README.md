@@ -4,10 +4,10 @@
 
 ## Table of Contents
 
-- [Docker Compose Installation](##-docker-compose-installation)
-- [Composer installation](##-composer-installation)
-- [Initialize the Database](##-initialize-the-database)
-- [Run the serveur](##-run-the-serveur)
+- [Docker Compose Installation](#docker-compose-installation)
+- [Composer installation](#composer-installation)
+- [Initialize the Database](#initialize-the-database)
+- [Run the serveur](#run-the-serveur)
 
 ## Docker Compose Installation
 ___
@@ -35,7 +35,7 @@ ___
 ## Initialize the Database
 ___
 
-4/ In the .env file of the /my-project directory, locate the following two lines:
+4/ In the .env file of the /api directory, locate the following two lines:
 
 - **Running ->** `DATABASE_URL="mysql://simp:monkey@mariadb:3306/bitnami_myapp?serverVersion=10.6"`
 - **Update database ->**  `DATABASE_URL="mysql://simp:monkey@0.0.0.0:5069/bitnami_myapp?serverVersion=10.6"`

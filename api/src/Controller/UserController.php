@@ -56,6 +56,21 @@ class UserController extends AbstractController
         ]);
     }
 
+    
+    #[Route('/users/fingerprint/{id}', name: 'getUserByFingerprint', methods: ['GET'])]
+    public function getUserByFingerprint(UserRepository $userRepository, EntityManagerInterface $em, Serializer $serializer, $id)
+    {
+        $serializer = $serializer->getSerializer();
+        $user = $userRepository->findBy(['fingerprint' => $id]);
+        
+        $user = $serializer->serialize($user, 'json', ['groups'=> ["user", "alarm"]]);
+        return $this->json([
+            'code' => 200,
+            'user' => json_decode($user)
+        ]);
+    }
+    
+
     #[Route('/users/{id}', name: 'updateUser', methods: ['PUT'])]
     public function updateUser(Request $request, User $user, EntityManagerInterface $em, Serializer $serializer, AlarmRepository $alarmRepository)
     {
@@ -101,6 +116,9 @@ class UserController extends AbstractController
         $user->setFirstname($content->firstname); 
         $user->setIsAuthorized($content->isAuthorized); 
         $user->setCreatedAt(new DateTimeImmutable());
+        if (!empty($content->fingerprint)) {
+            $user->setFingerprint($content->fingerprint);
+        }
 
         $em->persist($user);
         $em->flush();
