@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Serializer;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 use function PHPUnit\Framework\isEmpty;
 
 class AlarmController extends AbstractController
@@ -47,25 +49,25 @@ class AlarmController extends AbstractController
 
         // creer un objet à partir des elements
         $content = json_decode($request->getContent());
-        // $checkAlarm = $alarmRepository->findOneBy(['name' => $content->name]);
-        dd($request->files->get('files'));
 
-        return $this->json([
-            'code' => 200,
-            'message' => null,
-        ]);
-        if (!$checkAlarm) {
+        $file = $request->files->get('file');
+
+        $checkAlarm = $alarmRepository->findOneBy(['name' => $file->getClientOriginalName()]);
+
+        if (!$checkAlarm && $file instanceof UploadedFile && $file->isValid()) {
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            // Génération d'un nom de fichier unique
+            $newFilename = $originalFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+            // Déplacement du fichier vers l'emplacement de stockage permanent
+            $file->move(
+                $this->getParameter('uploads_directory'),
+                $newFilename
+            );
+
             $alarm = new Alarm();
-
-            $music64 = $content->content;// explode(",", $content->content)[1];
-
-            $alarm->setAlarm($music64); 
-            $alarm->setName(isEmpty($content->name) ? $content->name :  "noName" );
-            
-            // file_put_contents($this->getParameter('uploads_directory').'/'.$content->name, base64_decode(str_replace("data:audio/midi;base64,", '', $content->content)));
-            $ifp = fopen($this->getParameter('uploads_directory').'/'.$content->name, "w"); 
-            fwrite( $ifp, base64_decode(str_replace("data:audio/midi;base64,", '', $content->content))); 
-            fclose( $ifp ); 
+            $alarm->setAlarm("test"); 
+            $alarm->setName($newFilename);
 
             $em->persist($alarm);
             $em->flush();
@@ -75,7 +77,6 @@ class AlarmController extends AbstractController
             return $this->json([
                 'code' => 200,
                 'message' => json_decode($alarm),
-                "explode" => $music64
             ]);
         } else {
             return $this->json([
