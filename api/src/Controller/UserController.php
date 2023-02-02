@@ -87,10 +87,10 @@ class UserController extends AbstractController
             $user->setFirstname($content->firstname);
         if(!empty($content->fingerprint))
             $user->setFingerprint($content->fingerprint);
-        if(!empty($content->isAuthorized))
-            $user->setIsAuthorized($content->isAuthorized);
         if(!empty($content->alarmId))
             $user->setAlarm($alarmRepository->find($content->alarmId));
+
+        try { $user->setIsAuthorized($content->isAuthorized); } catch (\Throwable $th) {}
         
         $user->setUpdatedAt(new DateTimeImmutable());
 
@@ -101,7 +101,8 @@ class UserController extends AbstractController
 
         return $this->json([
             'code' => 200,
-            'message' => json_decode($user)
+            'message' => json_decode($user),
+            "rest" => !empty($content->isAuthorized)
         ]);
     }
 

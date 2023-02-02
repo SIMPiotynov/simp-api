@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HistoryController extends AbstractController
 {
-    #[Route('/history', name: 'getHistories')]
+    #[Route('/history', name: 'getHistories', methods: ['GET'])]
     public function getHistories(HistoryRepository $historyRepository, Serializer $serializer): Response
     {
         $serializer = $serializer->getSerializer();
@@ -25,7 +25,7 @@ class HistoryController extends AbstractController
         ]);
     }
 
-    #[Route('/history/{id}', name: 'getHistoryById')]
+    #[Route('/history/{id}', name: 'getHistoryById', methods: ['GET'])]
     public function getHistoryById(History $history, Serializer $serializer): Response
     {
         $serializer = $serializer->getSerializer();
